@@ -8,6 +8,7 @@ use App\Models\Post;
 use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Grid;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -30,46 +31,49 @@ class PostResource extends Resource
             ->schema([
                 Card::make()
                     ->schema([
-                        Forms\Components\TextInput::make('title')
-                            ->required()
-                            ->maxLength(2048)
-                            ->reactive()
-                            ->afterStateUpdated(function (Closure $set, $state) {
-                                $set('slug', Str::slug($state));
-                            }),
-                        Forms\Components\TextInput::make('slug')
-                            ->required()
-                            ->maxLength(2048),
-                        Forms\Components\TextInput::make('thumbnail')
-                            ->maxLength(2048),
-                        Forms\Components\Textarea::make('body')
+                        Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->required()
+                                    ->maxLength(2048)
+                                    ->reactive()
+                                    ->afterStateUpdated(function (Closure $set, $state) {
+                                        $set('slug', Str::slug($state));
+                                    }),
+                                Forms\Components\TextInput::make('slug')
+                                    ->required()
+                                    ->maxLength(2048),
+                            ]),
+                        Forms\Components\RichEditor::make('body')
                             ->required(),
                         Forms\Components\Toggle::make('active')
                             ->required(),
-                        Forms\Components\DateTimePicker::make('published_at')
+                        Forms\Components\DateTimePicker::make('published_at'),
+                    ])->columnSpan(8),
+
+                Card::make()
+                    ->schema([
+                        Forms\Components\FileUpload::make('thumbnail'),
+                        Forms\Components\Select::make('categories')
+                            ->multiple()
+                            ->relationship('categories', 'title')
                             ->required(),
-                        Forms\Components\Select::make('user_id')
-                            ->relationship('user', 'name')
-                            ->required(),
-                    ])
-            ]);
+                    ])->columnSpan(4)
+            ])->columns(12);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('thumbnail'),
                 Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('slug'),
-                Tables\Columns\TextColumn::make('thumbnail'),
-                Tables\Columns\TextColumn::make('body'),
+                // Tables\Columns\TextColumn::make('body'),
                 Tables\Columns\IconColumn::make('active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime(),
-                Tables\Columns\TextColumn::make('user.name'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                // Tables\Columns\TextColumn::make('user.name'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime(),
             ])
