@@ -9,4 +9,7 @@
         <!-- Pagination -->
     </section>
 
+    <!-- Sidebar Section -->
+    <x-sidebar />
+
 </x-app-layout>
