@@ -53,8 +53,8 @@
                 class="w-full container mx-auto flex flex-col sm:flex-row items-center justify-center text-sm font-bold uppercase mt-0 px-6 py-2">
                 <a href="{{ route('home') }}" class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">Home</a>
                 @foreach ($categories as $category)
-                    <a href="#"
-                        class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">{{ $category->title }}</a>
+                    <a href="{{ route('by-category', $category) }}"
+                        class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2 {{ request('category')->slug === $category->slug ? 'bg-gray-300' : '' }}">{{ $category->title }}</a>
                 @endforeach
                 <a href="{{ route('home') }}" class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">Contact
                     us</a>
