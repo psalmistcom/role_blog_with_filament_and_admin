@@ -54,9 +54,10 @@
                 <a href="{{ route('home') }}" class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">Home</a>
                 @foreach ($categories as $category)
                     <a href="{{ route('by-category', $category) }}"
-                        class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2 {{ request('category')->slug === $category->slug ? 'bg-gray-300' : '' }}">{{ $category->title }}</a>
+                        class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2 {{ request('category')?->slug === $category->slug ? 'bg-gray-300' : '' }}">{{ $category->title }}</a>
                 @endforeach
-                <a href="{{ route('home') }}" class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">Contact
+                <a href="{{ route('about-us') }}"
+                    class="hover:bg-blue-600 hover:text-white rounded py-2 px-4 mx-2">About
                     us</a>
             </div>
         </div>

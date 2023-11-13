@@ -13,7 +13,8 @@ class SiteController extends Controller
     {
         $widget = TextWidget::query()
             ->where('key', '=', 'about-page')
-            ->where('active', '=', true);
+            ->where('active', '=', 1)
+            ->first();
 
         if (!$widget) {
             throw new NotFoundHttpException();
