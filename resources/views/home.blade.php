@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout meta-description="Recent updates from HighQ Innovations">
 
     <section class="w-full md:w-2/3 flex flex-col items-center px-3">
         @foreach ($posts as $post)

@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout meta-title="About QBlog - About Us" meta-description="All you need to know about highQ's blog">
     <section class="w-full  flex flex-col items-center px-3">
 
         <article class="w-full flex flex-col shadow my-4">
