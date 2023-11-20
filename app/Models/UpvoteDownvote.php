@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UpvoteDownvote extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'is_upvote',
+        'post_id',
+        'user_id',
+    ];
 }
