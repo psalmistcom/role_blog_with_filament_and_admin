@@ -23,6 +23,8 @@
                 <div>
                     {!! $post->body !!}
                 </div>
+
+                <livewire:upvote-downvote />
             </div>
         </article>
 
