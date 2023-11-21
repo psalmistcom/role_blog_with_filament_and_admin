@@ -27,4 +27,29 @@ class UpvoteDownvote extends Component
 
         return view('livewire.upvote-downvote', compact('upvotes', 'downvotes'));
     }
+
+    public function upvotedownvote($upvote = true)
+    {
+        $user = request()->user();
+
+        if (!$user) {
+            return $this->redirect('login');
+        }
+
+        if (!$user->hasVerifiedEmail()) {
+            return $this->redirect('verification.notice');
+        }
+
+        $upvoteDownvote = UpvoteDownvote::where('post_id', '=', $this->post->id)
+            ->where('user_id', '=', $user->id)
+            ->first();
+
+        if ($upvoteDownvote) {
+            UpvoteDownvote::create([
+                'is_upvote' => $upvote,
+                'post_id' => $this->post->id,
+                'user_id' => $user->id
+            ]);
+        }
+    }
 }
