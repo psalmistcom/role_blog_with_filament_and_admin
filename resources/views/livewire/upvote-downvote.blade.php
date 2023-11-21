@@ -1,5 +1,6 @@
 <div class="flex gap-4">
-    <button wire:click="upvotedownvote()" class="flex item-center gap-2 hover:text-blue-500 transition-all">
+    <button wire:click="upvotedownvote()"
+        class="flex item-center gap-2 hover:text-blue-600 transition-all {{ $hasUpvote ? 'text-blue-500' : '' }}">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -7,7 +8,8 @@
         </svg>
         {{ $upvotes }}
     </button>
-    <button wire:click="upvotedownvote(false)" class="flex item-center gap-2 hover:text-blue-500 transition-all">
+    <button wire:click="upvotedownvote(false)"
+        class="flex item-center gap-2 hover:text-red-600 transition-all {{ $hasUpvote === false ? 'text-red-500' : '' }}">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="rounds"
