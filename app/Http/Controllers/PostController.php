@@ -19,10 +19,10 @@ class PostController extends Controller
     public function home(): View
     {
         // latest post 
-        $latestPost = Post::where('active', '=', 1)
-            ->whereDate('published_at', '<', Carbon::now())
-            ->orderBy('published_at', 'desc')
-            ->limit(1)
+        $latestPost = Post::where('active', '=', 1)->latest()
+            // ->whereDate('published_at', '<', Carbon::now())
+            // ->orderBy('published_at', 'desc')
+            // ->limit(1)
             ->first();
 
         //show the most popular 3 posts based on upvotes 
@@ -30,7 +30,8 @@ class PostController extends Controller
             ->leftjoin('upvote_downvotes', 'posts.id', '=', 'upvote_downvotes.post_id')
             ->select('posts.*', DB::raw('COUNT(upvote_downvotes.id) as upvote_count'))
             ->where(function ($query) {
-                $query->where('upvote_downvotes.is_upvote', '=', 1);
+                $query->whereNull('upvote_downvotes.is_upvote')
+                    ->orWhere('upvote_downvotes.is_upvote', '=', 1);
             })
             ->where('active', '=', 1)
             ->whereDate('published_at', '<', Carbon::now())
@@ -71,9 +72,12 @@ class PostController extends Controller
      */
     public function show(Post $post, Request $request)
     {
-        if (!$post->active || $post->published_at > Carbon::now()) {
+        if (!$post->active) {
             throw new NotFoundHttpException();
         }
+        // if (!$post->active || $post->published_at > Carbon::now()) {
+        //     throw new NotFoundHttpException();
+        // }
 
         $next = Post::query()
             ->where('active', true)

@@ -22,6 +22,9 @@ class PostOverview extends Widget
             'downvotes' => UpvoteDownvote::where('post_id', '=', $this->record->id)
                 ->where('is_upvote', '=', 0)
                 ->count(),
+            // 'viewcount' => 3,
+            // 'upvotes' => 3,
+            // 'downvotes' => 3
         ];
     }
     protected static string $view = 'filament.widgets.post-overview';
