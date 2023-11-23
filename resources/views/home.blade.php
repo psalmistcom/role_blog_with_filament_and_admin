@@ -1,7 +1,7 @@
 <x-app-layout meta-title="HighQ Blog" meta-description="Recent updates from HighQ Innovations">
     <div class="container max-w4xl mx-auto py-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {{-- Latest Post  --}}
             <div class="col-span-2">
                 <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
@@ -35,6 +35,10 @@
                             <div class="text-xs">
                                 {{ $post->shortBody(10) }}
                             </div>
+                            <a href="{{ route('view', $post) }}"
+                                class="text-gray-800 hover:text-blue-500 text-xs font-bold">Continue Reading
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 @endforeach
@@ -46,6 +50,11 @@
             <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
                 recommended Posts
             </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                @foreach ($recommendedPosts as $post)
+                    <x-post-item :post="$post" :show-author="false" />
+                @endforeach
+            </div>
         </div>
 
         {{-- Latest Categories --}}
