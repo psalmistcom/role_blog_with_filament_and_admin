@@ -1,7 +1,7 @@
 <x-app-layout meta-title="HighQ Blog" meta-description="Recent updates from HighQ Innovations">
     <div class="container max-w4xl mx-auto py-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {{-- Latest Post  --}}
             <div class="col-span-2">
                 <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
@@ -46,7 +46,7 @@
         </div>
 
         {{-- recommended posts  --}}
-        <div>
+        <div class="mb-8">
             <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
                 recommended Posts
             </h2>
@@ -62,6 +62,21 @@
             <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
                 Recent Categories
             </h2>
+            @foreach ($categories as $category)
+                <div class="mb-5">
+                    <div class="flex gap-2">
+                        <h3 class="text-lg sm:text-xl font-bold bg-blue-500 text-white p-2 rounded">
+                            {{ $category->title }}
+                        </h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {{-- @foreach ($category->posts as $post) --}}
+                        @foreach ($category->publishedPosts()->limit(3)->get() as $post)
+                            <x-post-item :post="$post" :show-author="false" />
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
         </div>
         {{-- <section class="w-full md:w-2/3 flex flex-col items-center px-3">
             @foreach ($posts as $post)

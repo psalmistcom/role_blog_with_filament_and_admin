@@ -73,7 +73,9 @@ class PostController extends Controller
                 ->setBindings([$user->id])
                 ->limit(3)
                 ->get();
-        } else {
+        }
+        //Not authorized - popular posts based on views 
+        else {
             $recommendedPosts = Post::query()
                 ->leftJoin('post_views', 'posts.id', '=', 'post_views.post_id')
                 ->select('posts.*', DB::raw('COUNT(post_views.id) as view_count'))
@@ -98,17 +100,56 @@ class PostController extends Controller
                 ->get();
         }
 
-        //Not authorized - popular posts based on views 
 
         // show recent categories with thier latest posts 
 
-        $posts = Post::query()
-            ->where('active', '=', 1)
-            ->whereDate('published_at', '<', Carbon::now())
-            ->orderBy('published_at', 'desc')
-            ->paginate(10);
+        $categories = Category::query()
+            // ->with(['posts' => function ($query) {
+            //     $query->orderByDesc('published_at')->limit(3);
+            // }])
+            ->whereHas('posts', function ($query) {
+                $query->where('active', '=', 1)
+                    ->whereDate('published_at', '<', Carbon::now());
+            })
+            ->select('categories.*')
+            ->selectRaw('MAX(posts.published_at) as max_date')
+            ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
+            ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
+            ->orderByDesc('max_date')
+            ->groupBy([
+                'categories.id',
+                'categories.title',
+                'categories.slug',
+                'categories.created_at',
+                'categories.updated_at',
+            ])
+            ->limit(5)
+            ->get();
+        // $categories = Category::query()
+        //     //            ->with(['posts' => function ($query) {
+        //     //                $query->orderByDesc('published_at');
+        //     //            }])
+        //     ->whereHas('posts', function ($query) {
+        //         $query
+        //             ->where('active', '=', 1)
+        //             ->whereDate('published_at', '<', Carbon::now());
+        //     })
+        //     ->select('categories.*')
+        //     ->selectRaw('MAX(posts.published_at) as max_date')
+        //     ->leftJoin('category_post', 'categories.id', '=', 'category_post.category_id')
+        //     ->leftJoin('posts', 'posts.id', '=', 'category_post.post_id')
+        //     ->orderByDesc('max_date')
+        //     ->groupBy([
+        //         'categories.id',
+        //         'categories.title',
+        //         'categories.slug',
+        //         'categories.created_at',
+        //         'categories.updated_at',
+        //     ])
+        //     ->limit(5)
+        //     ->get();
 
-        return view('home', compact('posts', 'latestPost', 'popularPosts', 'recommendedPosts'));
+        return view('home', compact('latestPost', 'popularPosts', 'recommendedPosts', 'categories'));
     }
 
     /**
