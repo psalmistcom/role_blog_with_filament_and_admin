@@ -17,7 +17,7 @@
                 </h2>
                 @foreach ($popularPosts as $post)
                     <div class="grid grid-cols-4 gap-3 mb-4">
-                        <div class="pt-2">
+                        <div class="pt-1">
                             <img src="{{ $post->getThumbnail() }}" alt="{{ $post->title }}" />
                         </div>
                         <div class="col-span-3">
@@ -58,26 +58,23 @@
         </div>
 
         {{-- Latest Categories --}}
-        <div>
-            <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
-                Recent Categories
-            </h2>
-            @foreach ($categories as $category)
-                <div class="mb-5">
-                    <div class="flex gap-2">
-                        <h3 class="text-lg sm:text-xl font-bold bg-blue-500 text-white p-2 rounded">
-                            {{ $category->title }}
-                        </h3>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {{-- @foreach ($category->posts as $post) --}}
+        @foreach ($categories as $category)
+            <div>
+                <h2 class="text-lg sm:text-xl font-bold text-blue-500 uppercase pb-1 border-b-2 border-blue-500 mb-3">
+                    {{ $category->title }}
+                    <a href="{{ route('by-category', $category) }}">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </h2>
+                <div class="mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         @foreach ($category->publishedPosts()->limit(3)->get() as $post)
                             <x-post-item :post="$post" :show-author="false" />
                         @endforeach
                     </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
         {{-- <section class="w-full md:w-2/3 flex flex-col items-center px-3">
             @foreach ($posts as $post)
                 <x-post-item :post="$post"></x-post-item>
